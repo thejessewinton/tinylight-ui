@@ -12,6 +12,7 @@
     "@radix-ui/react-slider": "^1.2.1",
     "@radix-ui/react-tabs": "^1.1.2",
     "@tinylight-ui/lightbox": "workspace:*",
+    "@tinylight-ui/dotted-map": "workspace:*",
     "@tinylight-ui/video": "workspace:*",
     "@vercel/analytics": "^1.4.1",
     "clsx": "^2.1.1",

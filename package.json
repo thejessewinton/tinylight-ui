@@ -1,7 +1,12 @@
 {
   "name": "tinylight",
   "version": "0.0.0",
-  "keywords": ["react", "video", "video player", "tinylight"],
+  "keywords": [
+    "react",
+    "video",
+    "video player",
+    "tinylight"
+  ],
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
@@ -22,7 +27,7 @@
   "bugs": {
     "url": "https://github.com/thejessewinton/tinylight-ui/issues"
   },
-  "packageManager": "pnpm@9.0.0",
+  "packageManager": "pnpm@10.11.0",
   "engines": {
     "node": ">=22"
   }

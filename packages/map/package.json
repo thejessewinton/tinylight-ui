@@ -1,6 +1,6 @@
 {
-  "name": "@tinylight-ui/video",
-  "version": "0.0.2",
+  "name": "@tinylight-ui/dotted-map",
+  "version": "1.0.1",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -15,9 +15,11 @@
   ],
   "keywords": [
     "tinylight",
-    "react",
-    "video",
-    "video player"
+    "map",
+    "dotted map",
+    "svg map",
+    "geospatial",
+    "svg"
   ],
   "scripts": {
     "build": "tsup",
@@ -26,22 +28,18 @@
   },
   "devDependencies": {
     "@types/node": "^20.11.24",
-    "@types/react": "19.0.0",
-    "@types/react-dom": "19.0.0",
+    "@types/proj4": "^2.5.6",
     "tsup": "^8.3.5",
     "typescript": "5.7.2"
   },
   "dependencies": {
-    "@radix-ui/react-slider": "^1.2.1",
-    "@radix-ui/react-slot": "^1.1.0",
-    "@radix-ui/react-tooltip": "^1.1.4",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
-    "remeda": "^2.17.3"
+    "@turf/boolean-point-in-polygon": "^7.2.0",
+    "proj4": "^2.17.0",
+    "zod": "^3.25.28"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/thejessewinton/tinylight-ui",
-    "directory": "packages/video"
+    "directory": "packages/lightbox"
   }
 }
