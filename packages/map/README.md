@@ -84,3 +84,8 @@ export const DottedMap = () => {
   );
 };
 ```
+
+### TO DO
+- There are some performance issues you might run into with the current implementation, especially with a large number of map samples. Be mindful, and do what you can to optimize the rendering of the SVG while I work to continually improve the performance.
+
+[] Map markers are reactive, map points should be static and only calculated once.
