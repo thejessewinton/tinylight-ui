@@ -1,21 +1,21 @@
-# @tinylight-ui/map
+# @tinylight-ui/dotted-map
 
-A lightweight utility to create good looking, stylized SVG maps. Heavily based on the 
+A lightweight utility to create good looking, stylized SVG maps. Heavily based on the [Dotted Map](https://github.com/NTag/dotted-map/tree/main) library, with more customization.
 
 ---
 
 ## Installation
 
-First, install `@tinylight-ui/map`.
+First, install `@tinylight-ui/dotted-map`.
 
 ```bash
-pnpm install @tinylight-ui/map
+pnpm install @tinylight-ui/dotted-map
 ```
 
 Then, import it into your app:
 
 ```tsx
-import { createMap } from "@tinylight-ui/map";
+import { createMap } from "@tinylight-ui/dotted-map";
 ```
 
 ## Usage
@@ -24,7 +24,7 @@ Create a map using the `createMap` function. The function takes an object with t
 - `width`: The width of the map in pixels.
 - `height`: The height of the map in pixels.
 - `markers`: An array of objects representing the markers to be placed on the map. Each object should have `lat` and `lng` properties, as well as an optional `size` property, which can be used to render custom markers of different sizes. `createMap` also accepts a generic type for additional properties on the marker. This can be useful for creating tooltips, or other customizations.
-- `mapSamples`: The number of samples to be taken from the map. This is used to create the map's points.
+- `mapSamples`: The target number of points generated on the map.
 
 ```typescript
 const { points, markers } = createMap({
@@ -75,7 +75,7 @@ const Map = () => {
           <circle
             cx={marker.x}
             cy={marker.y}
-            r={5}
+            r={marker.size ?? 5}
             fill="#000"
           />
         );

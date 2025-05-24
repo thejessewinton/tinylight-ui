@@ -1,5 +1,5 @@
 {
-  "name": "@tinylight-ui/map",
+  "name": "@tinylight-ui/dotted-map",
   "version": "1.0.1",
   "exports": {
     ".": {
@@ -15,11 +15,11 @@
   ],
   "keywords": [
     "tinylight",
-    "react",
-    "svelte",
     "map",
     "dotted map",
-    "svg map"
+    "svg map",
+    "geospatial",
+    "svg"
   ],
   "scripts": {
     "build": "tsup",

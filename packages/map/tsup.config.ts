@@ -1,7 +1,7 @@
-import { defineConfig } from 'tsup'
+import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/index.tsx'],
+  entry: ['src/index.ts'],
   minify: true,
   target: 'es2018',
   external: ['react'],
@@ -10,4 +10,4 @@ export default defineConfig({
   format: ['esm', 'cjs'],
   injectStyle: true,
   outDir: 'dist',
-})
+});

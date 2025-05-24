@@ -119,6 +119,9 @@ importers:
       '@radix-ui/react-tabs':
         specifier: ^1.1.2
         version: 1.1.2(@types/react-dom@19.0.0)(@types/react@19.0.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@tinylight-ui/dotted-map':
+        specifier: workspace:*
+        version: link:../packages/map
       '@tinylight-ui/lightbox':
         specifier: workspace:*
         version: link:../packages/lightbox
