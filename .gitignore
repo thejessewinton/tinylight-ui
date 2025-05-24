@@ -8,4 +8,4 @@ dist
 *.tsbuildinfo
 next-env.d.ts
 .vscode
-.contentlayer
+website/.content-collections

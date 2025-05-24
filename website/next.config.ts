@@ -1,7 +1,7 @@
+import { withContentCollections } from '@content-collections/next'
 import type { NextConfig } from 'next'
 
 const config: NextConfig = {
-  pageExtensions: ['md', 'mdx', 'ts', 'tsx'],
   images: {
     remotePatterns: [
       { hostname: 'placehold.co' },
@@ -10,4 +10,4 @@ const config: NextConfig = {
   },
 }
 
-export default config
+export default withContentCollections(config)

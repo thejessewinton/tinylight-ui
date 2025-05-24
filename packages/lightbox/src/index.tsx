@@ -27,6 +27,7 @@ interface LightboxContextValue {
   setActiveItemIndex: (index: number) => void
   toPrev: () => void
   toNext: () => void
+  thumbnailRefs: React.RefObject<React.RefObject<HTMLButtonElement>[]>
 }
 
 const LightboxContext = React.createContext<LightboxContextValue | null>(null)
@@ -42,9 +43,24 @@ const useLightbox = () => {
 interface LightboxRootProps
   extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Root> {}
 
-const LightboxRoot = (props: LightboxRootProps) => {
+const LightboxRoot = ({
+  open: externalOpen,
+  onOpenChange: externalOpenChange,
+  ...props
+}: LightboxRootProps) => {
+  const [open, setOpen] = React.useState(false)
   const [items, setItems] = React.useState<LightboxContextValue['items']>([])
   const [activeItemIndex, setActiveItemIndex] = React.useState(0)
+
+  const thumbnailRefs = React.useRef<
+    (React.RefObject<HTMLButtonElement> | null)[]
+  >([])
+
+  React.useEffect(() => {
+    thumbnailRefs.current = items.map(
+      (_, index) => thumbnailRefs.current[index] || React.createRef(),
+    )
+  }, [items])
 
   const toPrev = React.useCallback(() => {
     setActiveItemIndex((current) => {
@@ -66,22 +82,33 @@ const LightboxRoot = (props: LightboxRootProps) => {
     })
   }, [items.length])
 
-  // Handle keyboard navigation
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      switch (event.key) {
-        case 'ArrowLeft':
-          toPrev()
-          break
-        case 'ArrowRight':
+      if (!open) return
+
+      if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+        event.preventDefault()
+
+        let newIndex = activeItemIndex
+        if (event.key === 'ArrowRight') {
+          newIndex = Math.min(activeItemIndex + 1, items.length - 1)
           toNext()
-          break
+        } else if (event.key === 'ArrowLeft') {
+          newIndex = Math.max(activeItemIndex - 1, 0)
+          toPrev()
+        }
+
+        // Focus the corresponding thumbnail
+        const newRef = thumbnailRefs.current[newIndex]
+        if (newRef?.current) {
+          newRef.current.focus()
+        }
       }
     }
 
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [toPrev, toNext])
+  }, [toPrev, toNext, open, activeItemIndex, items.length])
 
   const contextValue = React.useMemo(
     () => ({
@@ -91,18 +118,32 @@ const LightboxRoot = (props: LightboxRootProps) => {
       setActiveItemIndex,
       toPrev,
       toNext,
+      thumbnailRefs,
     }),
     [items, activeItemIndex, toPrev, toNext],
   )
 
   return (
     <LightboxContext.Provider value={contextValue}>
-      <DialogPrimitive.Root {...props} />
+      <DialogPrimitive.Root
+        open={externalOpen ?? open}
+        onOpenChange={(e) => {
+          if (externalOpen === undefined) {
+            setOpen(e)
+          } else {
+            externalOpenChange(e)
+          }
+          setTimeout(() => {
+            setActiveItemIndex(0)
+          }, 400)
+        }}
+        {...props}
+      />
     </LightboxContext.Provider>
   )
 }
 
-type LightboxTriggerElement = React.ElementRef<typeof DialogPrimitive.Trigger>
+type LightboxTriggerElement = React.ComponentRef<typeof DialogPrimitive.Trigger>
 
 interface LightboxTriggerProps extends DialogPrimitive.DialogTriggerProps {}
 
@@ -119,7 +160,7 @@ const LightboxTrigger = React.forwardRef<
 
 LightboxTrigger.displayName = 'LightboxTrigger'
 
-type LightboxContentElement = React.ElementRef<typeof DialogPrimitive.Content>
+type LightboxContentElement = React.ComponentRef<typeof DialogPrimitive.Content>
 
 interface LightboxContentProps
   extends Omit<
@@ -127,42 +168,38 @@ interface LightboxContentProps
     'asChild'
   > {
   container?: React.ComponentProps<typeof DialogPrimitive.Portal>['container']
-  title: string
-  description: string
 }
 
 const LightboxContent = React.forwardRef<
   LightboxContentElement,
   LightboxContentProps
->(
-  (
-    { title, description, children, className, container, ...props },
-    forwardedRef,
-  ) => {
-    return (
-      <DialogPrimitive.Portal container={container}>
-        <DialogPrimitive.Title data-tinylight-title="">
-          {title}
-        </DialogPrimitive.Title>
-        <DialogPrimitive.Description data-tinylight-description="">
-          {description}
-        </DialogPrimitive.Description>
-
-        <DialogPrimitive.Overlay data-tinylight-overlay="">
-          <DialogPrimitive.Content
-            data-tinylight-content=""
-            ref={forwardedRef}
-            {...props}
-          >
-            {children}
-          </DialogPrimitive.Content>
-        </DialogPrimitive.Overlay>
-      </DialogPrimitive.Portal>
-    )
-  },
-)
+>(({ children, className, container, ...props }, forwardedRef) => {
+  return (
+    <DialogPrimitive.Portal container={container}>
+      <DialogPrimitive.Overlay data-tinylight-overlay="">
+        <DialogPrimitive.Content
+          data-tinylight-content=""
+          ref={forwardedRef}
+          {...props}
+        >
+          {children}
+        </DialogPrimitive.Content>
+      </DialogPrimitive.Overlay>
+    </DialogPrimitive.Portal>
+  )
+})
 
 LightboxContent.displayName = 'LightboxContent'
+
+interface LightboxControlsProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+const LightboxControls = ({ children, ...props }: LightboxControlsProps) => {
+  return (
+    <div data-tinylight-controls="" {...props}>
+      {children}
+    </div>
+  )
+}
 
 interface LightboxItemsProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -275,8 +312,35 @@ interface LightboxThumbsProps
   extends Omit<React.ComponentPropsWithRef<'div'>, 'children'> {}
 
 const LightboxThumbs = ({ className, ...props }: LightboxThumbsProps) => {
-  const { items, activeItemIndex, setActiveItemIndex } = useLightbox()
+  const { items, activeItemIndex, setActiveItemIndex, thumbnailRefs } =
+    useLightbox()
   const containerRef = React.useRef<HTMLDivElement>(null)
+
+  const centerActiveThumb = React.useCallback(() => {
+    if (containerRef.current && items.length > 0) {
+      const container = containerRef.current
+      const activeChild = container.children[activeItemIndex] as HTMLElement
+      const containerCenter = container.offsetWidth / 2
+      const childCenter = activeChild.offsetLeft + activeChild.offsetWidth / 2
+
+      container.scrollTo({
+        left: childCenter - containerCenter,
+        behavior: 'smooth',
+      })
+    }
+  }, [activeItemIndex, items.length])
+
+  React.useEffect(() => {
+    const resizeObserver = new ResizeObserver(centerActiveThumb)
+
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current)
+    }
+
+    return () => {
+      resizeObserver.disconnect()
+    }
+  }, [centerActiveThumb])
 
   React.useEffect(() => {
     if (containerRef.current && items.length > 0) {
@@ -319,9 +383,11 @@ const LightboxThumbs = ({ className, ...props }: LightboxThumbsProps) => {
             onClick={() => setActiveItemIndex(index)}
             type="button"
             key={item.key}
+            tabIndex={0}
+            ref={thumbnailRefs.current[index]}
             data-tinylight-thumb=""
             data-tinylight-active-thumb={activeItemIndex === index}
-            style={{ animationDelay: `${index * 100}ms` }}
+            style={{ '--stagger': `${index * 50}ms` } as React.CSSProperties}
           >
             <Comp {...props} src={imgSrc} alt="" />
           </button>
@@ -408,6 +474,9 @@ export const Lightbox = {
   Root: LightboxRoot,
   Trigger: LightboxTrigger,
   Content: LightboxContent,
+  Controls: LightboxControls,
+  Title: DialogPrimitive.Title,
+  Description: DialogPrimitive.Description,
   Items: LightboxItems,
   Image: LightboxImage,
   Video: LightboxVideo,

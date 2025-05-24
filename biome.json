@@ -38,6 +38,9 @@
         },
         "noNonNullAssertion": {
           "level": "off"
+        },
+        "noUselessElse": {
+          "level": "off"
         }
       },
       "nursery": {
@@ -59,6 +62,11 @@
       },
       "security": {
         "noDangerouslySetInnerHtml": {
+          "level": "off"
+        }
+      },
+      "suspicious": {
+        "noArrayIndexKey": {
           "level": "off"
         }
       }

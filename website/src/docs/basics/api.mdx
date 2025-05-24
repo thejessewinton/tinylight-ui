@@ -1,0 +1,293 @@
+---
+title: 'API'
+description: 'The components exposed by tinylight, and how to use them.'
+order: 2
+published: false
+---
+
+## Anatomy
+
+Import all parts and piece them together.
+
+```tsx
+import { Lightbox } from '@tinylight-ui/lightbox';
+
+export const LightboxComponent = () => {
+  return (
+    <Lightbox.Root>
+      <Lightbox.Trigger>Example</Lightbox.Trigger>
+
+      <Lightbox.Content>
+        <Lightbox.Title />
+        <Lightbox.Description />
+        <Lightbox.Close />
+        <Lightbox.Items>
+          <Lightbox.Image />
+          <Lightbox.Video />
+        </Lightbox.Items>
+        <Lightbox.Controls>
+          <Lightbox.PrevButton />
+          <Lightbox.Thumbs />
+          <Lightbox.NextButton />
+        </Lightbox.Controls>
+      </Lightbox.Content>
+    </Lightbox.Root>
+  );
+};
+```
+
+## Components API
+
+Description of props of each component.
+
+### Root
+
+Contains all parts of the lightbox.
+
+<Table>
+  <TableHead>
+    <TableRow>
+      <TableHeader>Prop</TableHeader>
+      <TableHeader>Type</TableHeader>
+      <TableHeader>Default</TableHeader>
+    </TableRow>
+  </TableHead>
+  <TableBody>
+    <TableRow>
+      <TableCell>Prop</TableCell>
+      <TableCell>Type</TableCell>
+      <TableCell>Default</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+
+### Trigger
+
+The button that opens the lightbox.
+
+<Table>
+  <TableHead>
+    <TableRow>
+      <TableHeader>Prop</TableHeader>
+      <TableHeader>Type</TableHeader>
+      <TableHeader>Default</TableHeader>
+    </TableRow>
+  </TableHead>
+  <TableBody>
+    <TableRow>
+      <TableCell>Prop</TableCell>
+      <TableCell>Type</TableCell>
+      <TableCell>Default</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+
+### Content
+
+The container of the lightbox.
+
+<Table>
+  <TableHead>
+    <TableRow>
+      <TableHeader>Prop</TableHeader>
+      <TableHeader>Type</TableHeader>
+      <TableHeader>Default</TableHeader>
+    </TableRow>
+  </TableHead>
+  <TableBody>
+    <TableRow>
+      <TableCell>Prop</TableCell>
+      <TableCell>Type</TableCell>
+      <TableCell>Default</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+
+### Close
+
+The button that closes the lightbox.
+
+<Table>
+  <TableHead>
+    <TableRow>
+      <TableHeader>Prop</TableHeader>
+      <TableHeader>Type</TableHeader>
+      <TableHeader>Default</TableHeader>
+    </TableRow>
+  </TableHead>
+  <TableBody>
+    <TableRow>
+      <TableCell>Prop</TableCell>
+      <TableCell>Type</TableCell>
+      <TableCell>Default</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+
+### Items
+
+The container of the slides of the lightbox.
+
+<Table>
+  <TableHead>
+    <TableRow>
+      <TableHeader>Prop</TableHeader>
+      <TableHeader>Type</TableHeader>
+      <TableHeader>Default</TableHeader>
+    </TableRow>
+  </TableHead>
+  <TableBody>
+    <TableRow>
+      <TableCell>Prop</TableCell>
+      <TableCell>Type</TableCell>
+      <TableCell>Default</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+
+### Image
+
+An image slide for the lightbox.
+
+<Table>
+  <TableHead>
+    <TableRow>
+      <TableHeader>Prop</TableHeader>
+      <TableHeader>Type</TableHeader>
+      <TableHeader>Default</TableHeader>
+    </TableRow>
+  </TableHead>
+  <TableBody>
+    <TableRow>
+      <TableCell>Prop</TableCell>
+      <TableCell>Type</TableCell>
+      <TableCell>Default</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+
+### Video
+
+A video slide for the lightbox.
+
+<Table>
+  <TableHead>
+    <TableRow>
+      <TableHeader>Prop</TableHeader>
+      <TableHeader>Type</TableHeader>
+      <TableHeader>Default</TableHeader>
+    </TableRow>
+  </TableHead>
+  <TableBody>
+    <TableRow>
+      <TableCell>Prop</TableCell>
+      <TableCell>Type</TableCell>
+      <TableCell>Default</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+
+### Controls
+
+An option container for the lightbox controls.
+
+<Table>
+  <TableHead>
+    <TableRow>
+      <TableHeader>Prop</TableHeader>
+      <TableHeader>Type</TableHeader>
+      <TableHeader>Default</TableHeader>
+    </TableRow>
+  </TableHead>
+  <TableBody>
+    <TableRow>
+      <TableCell>Prop</TableCell>
+      <TableCell>Type</TableCell>
+      <TableCell>Default</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+
+### PrevButton
+
+A button to navigate to the previous slide.
+
+<Table>
+  <TableHead>
+    <TableRow>
+      <TableHeader>Prop</TableHeader>
+      <TableHeader>Type</TableHeader>
+      <TableHeader>Default</TableHeader>
+    </TableRow>
+  </TableHead>
+  <TableBody>
+    <TableRow>
+      <TableCell>Prop</TableCell>
+      <TableCell>Type</TableCell>
+      <TableCell>Default</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+
+### NextButton
+
+A button to navigate to the next slide.
+
+<Table>
+  <TableHead>
+    <TableRow>
+      <TableHeader>Prop</TableHeader>
+      <TableHeader>Type</TableHeader>
+      <TableHeader>Default</TableHeader>
+    </TableRow>
+  </TableHead>
+  <TableBody>
+    <TableRow>
+      <TableCell>Prop</TableCell>
+      <TableCell>Type</TableCell>
+      <TableCell>Default</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+
+### Title
+
+An optional accessible title to be announced when the lightbox is opened.
+
+<Table>
+  <TableHead>
+    <TableRow>
+      <TableHeader>Prop</TableHeader>
+      <TableHeader>Type</TableHeader>
+      <TableHeader>Default</TableHeader>
+    </TableRow>
+  </TableHead>
+  <TableBody>
+    <TableRow>
+      <TableCell>Prop</TableCell>
+      <TableCell>Type</TableCell>
+      <TableCell>Default</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+
+### Description
+
+An optional accessible description to be announced when the lightbox is opened.
+
+<Table>
+  <TableHead>
+    <TableRow>
+      <TableHeader>Prop</TableHeader>
+      <TableHeader>Type</TableHeader>
+      <TableHeader>Default</TableHeader>
+    </TableRow>
+  </TableHead>
+  <TableBody>
+    <TableRow>
+      <TableCell>Prop</TableCell>
+      <TableCell>Type</TableCell>
+      <TableCell>Default</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
