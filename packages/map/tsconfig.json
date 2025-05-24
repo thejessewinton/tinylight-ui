@@ -3,7 +3,11 @@
     "jsx": "react-jsx",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "lib": ["es2015", "dom"],
-    "resolveJsonModule": true
+    "lib": ["es2019", "dom"],
+    "resolveJsonModule": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "sourceMap": true
   }
 }

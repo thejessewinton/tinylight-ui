@@ -1,17 +1,17 @@
-import proj4 from 'proj4';
 import inside from '@turf/boolean-point-in-polygon';
+import proj4 from 'proj4';
 
+import geojsonWorld from './countries.geo.json';
 import type {
+  CreateMapOptions,
   GeoJSON,
   GeoJsonFeature,
   Geometry,
-  Region,
-  PolygonGeometry,
   MultiPolygonGeometry,
-  CreateMapOptions,
   Point,
+  PolygonGeometry,
+  Region,
 } from './types';
-import geojsonWorld from './countries.geo.json';
 
 export const DEFAULT_WORLD_REGION = {
   lat: { min: -56, max: 71 },
@@ -77,11 +77,13 @@ export const geojsonToMultiPolygons = (geojson: GeoJSON): GeoJsonFeature => {
     MultiPolygonGeometry['coordinates']
   >((poly, feature) => {
     if (feature.geometry.type === 'Polygon') {
-      return [...poly, feature.geometry.coordinates];
+      poly.push(feature.geometry.coordinates);
     } else {
-      return [...poly, ...feature.geometry.coordinates];
+      poly.push(...feature.geometry.coordinates);
     }
+    return poly;
   }, []);
+
   return {
     type: 'Feature',
     id: 'multipolygon',

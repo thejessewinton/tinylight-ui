@@ -46,7 +46,7 @@ export type Marker<MarkerData> = {
   size?: number;
 } & MarkerData;
 
-export interface CreateMapOptions<T> {
+export interface CreateMapOptions<T = {}> {
   height: number;
   width: number;
   countries?: string[];

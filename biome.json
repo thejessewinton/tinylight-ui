@@ -38,6 +38,9 @@
         },
         "noNonNullAssertion": {
           "level": "off"
+        },
+        "noUselessElse": {
+          "level": "off"
         }
       },
       "nursery": {

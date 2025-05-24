@@ -27,6 +27,7 @@
     "lint": "tsc"
   },
   "devDependencies": {
+    "@types/node": "^20.11.24",
     "@types/proj4": "^2.5.6",
     "tsup": "^8.3.5",
     "typescript": "5.7.2"

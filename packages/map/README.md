@@ -57,7 +57,7 @@ const { points, markers } = createMap({
 After creating a map, render it as an SVG however you'd like:
 
 ```tsx
-const Map = () => {
+export const DottedMap = () => {
   return (
     <svg viewBox={`0 0 1200 600`} className="h-full w-full">
       {points.map((point) => {

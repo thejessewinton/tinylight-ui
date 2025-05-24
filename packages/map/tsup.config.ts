@@ -3,8 +3,7 @@ import { defineConfig } from 'tsup';
 export default defineConfig({
   entry: ['src/index.ts'],
   minify: true,
-  target: 'es2018',
-  external: ['react'],
+  target: 'es2019',
   sourcemap: true,
   dts: true,
   format: ['esm', 'cjs'],
