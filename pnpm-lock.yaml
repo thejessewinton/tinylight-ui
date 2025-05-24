@@ -2887,6 +2887,7 @@ packages:
         optional: true
 
   turbo-darwin-64@2.5.3:
+    resolution: {integrity: sha512-YSItEVBUIvAGPUDpAB9etEmSqZI3T6BHrkBkeSErvICXn3dfqXUfeLx35LfptLDEbrzFUdwYFNmt8QXOwe9yaw==}
     cpu: [x64]
     os: [darwin]
 
