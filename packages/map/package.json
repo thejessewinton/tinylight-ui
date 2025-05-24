@@ -1,6 +1,6 @@
 {
   "name": "@tinylight-ui/dotted-map",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
