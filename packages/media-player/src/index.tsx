@@ -48,30 +48,36 @@ const Root = ({ children, ...props }: MediaPlayerRootProps) => {
 
     const updateTime = () => setCurrentTime(video.currentTime)
     const updateDuration = () => setDuration(video.duration)
+    const handlePlay = () => setIsPlaying(true)
+    const handlePause = () => setIsPlaying(false)
 
-    // Update duration immediately in case metadata is already loaded
     if (video.readyState >= 1) {
       setDuration(video.duration)
     }
 
     video.addEventListener('timeupdate', updateTime)
     video.addEventListener('loadedmetadata', updateDuration)
+    video.addEventListener('durationchange', updateDuration)
+    video.addEventListener('play', handlePlay)
+    video.addEventListener('pause', handlePause)
 
     return () => {
       video.removeEventListener('timeupdate', updateTime)
       video.removeEventListener('loadedmetadata', updateDuration)
+      video.removeEventListener('durationchange', updateDuration)
+      video.removeEventListener('play', handlePlay)
+      video.removeEventListener('pause', handlePause)
     }
   }, [])
 
   const togglePlay = React.useCallback(() => {
     if (!ref.current) return
-    if (isPlaying) {
-      ref.current.pause()
-    } else {
+    if (ref.current.paused) {
       ref.current.play()
+    } else {
+      ref.current.pause()
     }
-    setIsPlaying(!isPlaying)
-  }, [isPlaying])
+  }, [])
 
   const toggleMuted = React.useCallback(() => {
     if (!ref.current) return
