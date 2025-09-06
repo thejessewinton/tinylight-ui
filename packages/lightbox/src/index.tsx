@@ -1,7 +1,7 @@
 "use client";
 import "./styles.css";
 
-import { Dialog, mergeProps, useRender } from "@base-ui-components/react";
+import { Dialog, useRender } from "@base-ui-components/react";
 import React from "react";
 import { Close, NextArrow, PreviousArrow } from "./assets";
 import { getValidChildren } from "./helpers";
@@ -397,7 +397,7 @@ const LightboxThumbs = ({
             data-tinylight-active-thumb={activeItemIndex === index}
             style={{ "--stagger": `${index * 50}ms` } as React.CSSProperties}
           >
-            <LightboxThumb render={render} src={imgSrc} />
+            <LightboxThumb render={render} src={imgSrc} {...rest} />
           </button>
         );
       })}
