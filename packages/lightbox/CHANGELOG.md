@@ -1,5 +1,11 @@
 # @tinylight-ui/lightbox
 
+## 2.0.0
+
+### Major Changes
+
+- Radix -> Base UI
+
 ## 1.0.1
 
 ### Patch Changes
