@@ -54,6 +54,8 @@ const LightboxRoot = ({
     (React.RefObject<HTMLButtonElement> | null)[]
   >([]);
 
+  const isOpen = externalOpen ?? open;
+
   React.useEffect(() => {
     thumbnailRefs.current = items.map(
       (_, index) => thumbnailRefs.current[index] || React.createRef()
@@ -81,32 +83,42 @@ const LightboxRoot = ({
   }, [items.length]);
 
   React.useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (!open) return;
+    if (!isOpen) return;
 
+    const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
         event.preventDefault();
+        event.stopPropagation();
 
         let newIndex = activeItemIndex;
         if (event.key === "ArrowRight") {
           newIndex = Math.min(activeItemIndex + 1, items.length - 1);
-          toNext();
         } else if (event.key === "ArrowLeft") {
           newIndex = Math.max(activeItemIndex - 1, 0);
-          toPrev();
+        }
+
+        if (newIndex !== activeItemIndex) {
+          setActiveItemIndex(newIndex);
         }
 
         // Focus the corresponding thumbnail
-        const newRef = thumbnailRefs.current[newIndex];
-        if (newRef?.current) {
-          newRef.current.focus();
-        }
+        setTimeout(() => {
+          const newRef = thumbnailRefs.current[newIndex];
+          if (newRef?.current) {
+            newRef.current.focus();
+          }
+        }, 0);
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [toPrev, toNext, open, activeItemIndex, items.length]);
+    document.addEventListener("keydown", handleKeyDown, true);
+    window.addEventListener("keydown", handleKeyDown, true);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown, true);
+      window.removeEventListener("keydown", handleKeyDown, true);
+    };
+  }, [activeItemIndex, items.length, isOpen]);
 
   const contextValue = React.useMemo(
     () => ({
@@ -124,7 +136,7 @@ const LightboxRoot = ({
   return (
     <LightboxContext.Provider value={contextValue}>
       <Dialog.Root
-        open={externalOpen ?? open}
+        open={isOpen}
         onOpenChange={(open, eventData) => {
           if (externalOpen !== undefined) {
             externalOpenChange(open, eventData);
