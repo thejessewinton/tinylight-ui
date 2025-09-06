@@ -29,9 +29,10 @@
     "@types/react": "19.0.0",
     "@types/react-dom": "19.0.0",
     "tsup": "^8.3.5",
-    "typescript": "5.7.2"
+    "typescript": "5.9.2"
   },
   "dependencies": {
+    "@base-ui-components/react": "^1.0.0-beta.3",
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-slot": "^1.1.0",
     "react": "19.0.0",

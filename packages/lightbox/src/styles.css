@@ -16,6 +16,7 @@
   inset: 0;
   display: flex;
   align-items: center;
+  transition: opacity 200ms var(--ease-in-out-quad);
 
   &::after {
     content: "";
@@ -29,18 +30,17 @@
       transparent 175px
     );
     z-index: 0;
+    transition: opacity 200ms var(--ease-in-out-quad);
   }
 
-  &:where([data-state="closed"]) {
-    animation: fade 400ms var(--ease-in-out-quad) reverse;
-  }
-
-  &:where([data-state="open"])::after {
-    animation: fade 400ms var(--ease-in-out-quad) forwards;
-  }
-
-  &:where([data-state="closed"])::after {
-    animation: fade 400ms var(--ease-in-out-quad) reverse;
+  /* Starting/ending states for overlay */
+  &[data-starting-style],
+  &[data-ending-style] {
+    opacity: 0;
+    
+    &::after {
+      opacity: 0;
+    }
   }
 }
 
@@ -70,12 +70,17 @@
   position: relative;
   z-index: 1000;
   max-width: 100vw;
+  transition: 
+    opacity 200ms var(--ease-in-out-quad),
+    filter 200ms var(--ease-in-out-quad),
+    transform 200ms var(--ease-in-out-quad);
 
-  &:where([data-state="open"]) {
-    animation: tinylight-content-show 400ms var(--ease-in-out-quad);
-  }
-  &:where([data-state="closed"]) {
-    animation: tinylight-content-hide 400ms var(--ease-in-out-quad);
+  /* Starting/ending states for content */
+  &[data-starting-style],
+  &[data-ending-style] {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(10px);
   }
 }
 
@@ -163,17 +168,27 @@
   cursor: pointer;
   border-radius: 8px;
   overflow: hidden;
-  will-change: transform box-shadow opacity;
-  transition: 500ms var(--ease-in-out-quad);
-  transition-property: flex, box-shadow, opacity;
+  will-change: transform, box-shadow, opacity, flex, filter;
+  transition: 
+    350ms var(--ease-in-out-quad),
+    opacity 350ms var(--ease-in-out-quad),
+    filter 350ms var(--ease-in-out-quad),
+    transform 350ms var(--ease-in-out-quad);
+  transition-property: flex, box-shadow, opacity, filter, transform;
   transform-origin: bottom left;
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  animation: tinylight-thumb-show 750ms var(--ease-in-out-quad) forwards;
-  animation-delay: var(--stagger);
-  opacity: 0;
+  /* Apply staggered transition delays via CSS custom property */
+  transition-delay: var(--stagger, 0ms);
+
+  /* Starting state for thumbnails */
+  &[data-starting-style] {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(20px);
+  }
 
   &:where([data-tinylight-active-thumb="true"]) {
-    flex: 0 0 120px;
+    flex: 0 0 110px;
     box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
   }
 
@@ -202,7 +217,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 100%;
-  will-change: opacity, color;
+  will-change: opacity, color, background-color;
   transition: 0.2s var(--ease-in-out-quad);
   transition-property: background-color, opacity;
   border: 1px solid rgba(255, 255, 255, 0.5);
@@ -222,52 +237,11 @@
   margin: 0 8px;
 }
 
-@keyframes fade {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  @keyframes tinylight-content-show {
-    from {
-      opacity: 0;
-      filter: blur(10px);
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      filter: blur(0px);
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes tinylight-content-hide {
-    from {
-      opacity: 1;
-      filter: blur(0px);
-      transform: translateY(0);
-    }
-    to {
-      opacity: 0;
-      filter: blur(10px);
-      transform: translateY(10px);
-    }
-  }
-
-  @keyframes tinylight-thumb-show {
-    from {
-      opacity: 0;
-      filter: blur(10px);
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      filter: blur(0px);
-      transform: translateY(0);
-    }
+@media (prefers-reduced-motion: reduce) {
+  [data-tinylight-overlay],
+  [data-tinylight-overlay]::after,
+  [data-tinylight-content],
+  [data-tinylight-thumb] {
+    transition-duration: 0.01ms !important;
   }
 }
