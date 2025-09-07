@@ -1,5 +1,11 @@
 # @tinylight-ui/lightbox
 
+## 2.2.1
+
+### Patch Changes
+
+- rm radix install
+
 ## 2.0.0
 
 ### Major Changes
