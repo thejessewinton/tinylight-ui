@@ -1,6 +1,6 @@
 {
   "name": "@tinylight-ui/lightbox",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -10,8 +10,15 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
-  "keywords": ["tinylight", "react", "lightbox", "image gallery"],
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "tinylight",
+    "react",
+    "lightbox",
+    "image gallery"
+  ],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
@@ -26,8 +33,6 @@
   },
   "dependencies": {
     "@base-ui-components/react": "^1.0.0-beta.3",
-    "@radix-ui/react-dialog": "^1.1.2",
-    "@radix-ui/react-slot": "^1.1.0",
     "react": "19.0.0",
     "react-dom": "19.0.0"
   },
