@@ -22,7 +22,7 @@ export const LightboxComponent = () => {
           <Lightbox.Image
             render={
               <Image
-                src="https://placehold.co/800x400/png"
+                src="https://placehold.co/800x400/webp"
                 width={800}
                 height={400}
                 alt="Placeholder"
@@ -33,7 +33,7 @@ export const LightboxComponent = () => {
           <Lightbox.Image
             render={
               <Image
-                src="https://placehold.co/1300x500/png"
+                src="https://placehold.co/1300x500/webp"
                 width={1300}
                 height={500}
                 alt="Placeholder"
@@ -42,7 +42,7 @@ export const LightboxComponent = () => {
           />
 
           <Lightbox.Video
-            poster="https://placehold.co/960x540/png"
+            poster="https://placehold.co/960x540/webp"
             controls
             preload="auto"
             src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm"
