@@ -1,5 +1,11 @@
 # @tinylight-ui/lightbox
 
+## 2.3.0
+
+### Minor Changes
+
+- c35e649: update passed props
+
 ## 2.2.1
 
 ### Patch Changes
