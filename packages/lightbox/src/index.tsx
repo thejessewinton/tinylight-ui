@@ -7,17 +7,9 @@ import { Close, NextArrow, PreviousArrow } from "./assets";
 import { getValidChildren } from "./helpers";
 import { useIsomorphicLayoutEffect } from "./hooks";
 
-interface LightboxItem extends React.ReactElement {
-  props: {
-    type?: typeof LightboxVideo;
-    poster?: string;
-    src?: string;
-    render?: useRender.ComponentProps<"div">["render"];
-    children?: React.ReactElement & {
-      props: LightboxImageProps | LightboxVideoProps;
-    };
-  };
-}
+type LightboxItem =
+  | React.ReactElement<LightboxImageProps>
+  | React.ReactElement<LightboxVideoProps>;
 
 interface LightboxContextValue {
   items: LightboxItem[];
@@ -26,7 +18,7 @@ interface LightboxContextValue {
   setActiveItemIndex: (index: number) => void;
   toPrev: () => void;
   toNext: () => void;
-  thumbnailRefs: React.RefObject<React.RefObject<HTMLButtonElement>[]>;
+  thumbnailRefs: React.RefObject<(React.RefObject<HTMLButtonElement> | null)[]>;
 }
 
 const LightboxContext = React.createContext<LightboxContextValue | null>(null);
@@ -303,11 +295,11 @@ const LightboxVideo = ({ render, ...rest }: LightboxVideoProps) => {
 
 interface LightboxThumbProps extends useRender.ComponentProps<"img"> {}
 
-const LightboxThumb = ({ render, ...rest }: LightboxThumbProps) => {
+const LightboxThumb = ({ render, src, ...rest }: LightboxThumbProps) => {
   const element = useRender({
     defaultTagName: "img",
     render,
-    props: rest,
+    props: { src, ...rest },
   });
 
   return element;
@@ -368,23 +360,30 @@ const LightboxThumbs = ({
   return (
     <div data-tinylight-thumbs="" ref={containerRef} {...rest}>
       {items.map((item, index) => {
-        const isLightboxVideoProps = (
-          props: LightboxVideoProps | LightboxImageProps
-        ): props is LightboxVideoProps => {
-          return "poster" in props;
-        };
+        const {
+          render: itemRender,
+          src,
+          poster,
+          controls,
+          autoPlay,
+          muted,
+          loop,
+          ...restProps
+        } = item.props as LightboxImageProps & LightboxVideoProps;
 
-        const { render, ...rest } = item.props;
-
+        const isRenderElement = React.isValidElement(itemRender);
+        const isImage = item.type === LightboxImage;
         const isVideo = item.type === LightboxVideo;
+        const isRenderImage = isRenderElement && isImage;
+        const isRenderVideo = isRenderElement && isVideo;
 
-        const imgSrc = isVideo
-          ? item.props.poster
-          : render && item.props.children
-          ? isLightboxVideoProps(item.props.children.props)
-            ? item.props.children.props.poster
-            : item.props.children.props.src
-          : item.props.src;
+        const imgSrc = isRenderVideo
+          ? (itemRender.props.poster as string)
+          : isRenderImage
+          ? (itemRender.props.src as string)
+          : isVideo
+          ? poster
+          : src;
 
         return (
           <button
@@ -397,7 +396,7 @@ const LightboxThumbs = ({
             data-tinylight-active-thumb={activeItemIndex === index}
             style={{ "--stagger": `${index * 50}ms` } as React.CSSProperties}
           >
-            <LightboxThumb render={render} src={imgSrc} {...rest} />
+            <LightboxThumb render={render} src={imgSrc} alt="" {...restProps} />
           </button>
         );
       })}
