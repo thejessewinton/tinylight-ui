@@ -123,9 +123,9 @@
   }
 
   & > [data-tinylight-video] {
-    display: flex;
+    /* display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center; */
   }
 
   &:where([data-tinylight-active-item="true"]) {
@@ -170,17 +170,16 @@
   overflow: hidden;
   will-change: transform, box-shadow, opacity, flex, filter;
   transition: 
-    350ms var(--ease-in-out-quad),
-    opacity 350ms var(--ease-in-out-quad),
-    filter 350ms var(--ease-in-out-quad),
-    transform 350ms var(--ease-in-out-quad);
+    200ms var(--ease-in-out-quad),
+    opacity 200ms var(--ease-in-out-quad),
+    filter 200ms var(--ease-in-out-quad),
+    transform 200ms var(--ease-in-out-quad);
   transition-property: flex, box-shadow, opacity, filter, transform;
   transform-origin: bottom left;
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  /* Apply staggered transition delays via CSS custom property */
   transition-delay: var(--stagger, 0ms);
 
-  /* Starting state for thumbnails */
+
   &[data-starting-style] {
     opacity: 0;
     filter: blur(10px);
@@ -197,6 +196,40 @@
     height: 100%;
     width: 100%;
   }
+}
+
+[data-tinylight-bullets] {
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  flex-wrap: nowrap;
+  gap: 1rem;
+  margin: 0 auto;
+  padding: 20px;
+  position: relative;
+  scroll-snap-type: x mandatory;
+  overflow-x: auto;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+
+[data-tinylight-bullet] {
+  height: 10px;  
+  flex: 0 0 10px;
+  background-color: #fff;
+  border-radius: 50px;
+  padding: 0;
+  cursor: pointer;
+  transition: 
+    200ms var(--ease-in-out-quad);
+  transition-property: flex, box-shadow, opacity, filter, transform;
+  transform-origin: center left;
+}
+
+[data-tinylight-active-bullet="true"] {
+  flex: 0 0 25px;
 }
 
 [data-tinylight-close-button] {

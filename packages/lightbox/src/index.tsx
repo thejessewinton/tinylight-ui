@@ -24,7 +24,7 @@ interface LightboxContextValue {
 const LightboxContext = React.createContext<LightboxContextValue | null>(null);
 
 const useLightbox = () => {
-  const context = React.useContext(LightboxContext);
+  const context = React.use(LightboxContext);
   if (!context) {
     throw new Error("useLightbox must be used within a LightboxProvider");
   }
@@ -136,9 +136,11 @@ const LightboxRoot = ({
             setOpen(open);
           }
 
-          requestAnimationFrame(() => {
+          const timeout = setTimeout(() => {
             setActiveItemIndex(0);
-          });
+          }, 100);
+
+          return () => clearTimeout(timeout);
         }}
         {...rest}
       />
@@ -164,8 +166,8 @@ const LightboxContent = ({
 }: LightboxContentProps) => {
   return (
     <Dialog.Portal container={container}>
-      <Dialog.Backdrop data-tinylight-overlay="">
-        <Dialog.Popup data-tinylight-content="" {...rest}>
+      <Dialog.Backdrop data-tinylight-overlay>
+        <Dialog.Popup data-tinylight-content {...rest}>
           {children}
         </Dialog.Popup>
       </Dialog.Backdrop>
@@ -177,7 +179,7 @@ interface LightboxControlsProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const LightboxControls = ({ children, ...rest }: LightboxControlsProps) => {
   return (
-    <div data-tinylight-controls="" {...rest}>
+    <div data-tinylight-controls {...rest}>
       {children}
     </div>
   );
@@ -244,11 +246,11 @@ const LightboxItems = ({ children, ...rest }: LightboxItemsProps) => {
   }, []);
 
   return (
-    <div data-tinylight-items="" ref={containerRef} {...rest}>
+    <div data-tinylight-items ref={containerRef} {...rest}>
       {validChildren.map((child, i) => {
         return (
           <div
-            data-tinylight-item=""
+            data-tinylight-item
             data-tinylight-active-item={activeItemIndex === i}
             key={child.key}
           >
@@ -290,7 +292,7 @@ const LightboxVideo = ({ render, ...rest }: LightboxVideoProps) => {
     videoRef.current?.pause();
   }
 
-  return <div data-tinylight-video="">{element}</div>;
+  return <div data-tinylight-video>{element}</div>;
 };
 
 interface LightboxThumbProps extends useRender.ComponentProps<"img"> {}
@@ -358,7 +360,7 @@ const LightboxThumbs = ({
   }, [activeItemIndex, items.length]);
 
   return (
-    <div data-tinylight-thumbs="" ref={containerRef} {...rest}>
+    <div data-tinylight-thumbs ref={containerRef} {...rest}>
       {items.map((item, index) => {
         const {
           render: itemRender,
@@ -368,6 +370,7 @@ const LightboxThumbs = ({
           autoPlay,
           muted,
           loop,
+          alt,
           ...restProps
         } = item.props as LightboxImageProps & LightboxVideoProps;
 
@@ -385,6 +388,8 @@ const LightboxThumbs = ({
           ? poster
           : src;
 
+        const imgAlt = isRenderImage ? (itemRender.props.alt as string) : alt;
+
         return (
           <button
             onClick={() => setActiveItemIndex(index)}
@@ -392,12 +397,47 @@ const LightboxThumbs = ({
             key={item.key}
             tabIndex={0}
             ref={thumbnailRefs.current[index]}
-            data-tinylight-thumb=""
+            data-tinylight-thumb
             data-tinylight-active-thumb={activeItemIndex === index}
             style={{ "--stagger": `${index * 50}ms` } as React.CSSProperties}
           >
-            <LightboxThumb render={render} src={imgSrc} alt="" {...restProps} />
+            <LightboxThumb
+              render={render}
+              src={imgSrc}
+              alt={imgAlt}
+              {...restProps}
+            />
           </button>
+        );
+      })}
+    </div>
+  );
+};
+
+interface LightboxBulletsProps
+  extends Omit<useRender.ComponentProps<"div">, "children"> {}
+
+const LightboxBullets = ({
+  className,
+  render,
+  ...rest
+}: LightboxBulletsProps) => {
+  const { items, activeItemIndex, setActiveItemIndex, thumbnailRefs } =
+    useLightbox();
+  const containerRef = React.useRef<HTMLDivElement>(null);
+
+  return (
+    <div data-tinylight-bullets ref={containerRef} {...rest}>
+      {items.map((item, index) => {
+        return (
+          <button
+            onClick={() => setActiveItemIndex(index)}
+            type="button"
+            key={item.key}
+            tabIndex={0}
+            data-tinylight-bullet
+            data-tinylight-active-bullet={activeItemIndex === index}
+          />
         );
       })}
     </div>
@@ -412,7 +452,7 @@ interface LightboxCloseProps
 
 const LightboxClose = ({ icon: Icon, ...rest }: LightboxCloseProps) => {
   return (
-    <Dialog.Close data-tinylight-close-button="" {...rest}>
+    <Dialog.Close data-tinylight-close-button {...rest}>
       {Icon ?? <Close />}
     </Dialog.Close>
   );
@@ -437,8 +477,8 @@ const LightboxPrevButton = ({
       ref={ref}
       disabled={activeItemIndex === 0}
       aria-label="Previous item"
-      data-tinylight-prev-button=""
-      data-tinylight-nav-button=""
+      data-tinylight-prev-button
+      data-tinylight-nav-button
       {...rest}
     >
       {Icon ?? <PreviousArrow />}
@@ -465,8 +505,8 @@ const LightboxNextButton = ({
       ref={ref}
       disabled={activeItemIndex === items.length - 1}
       aria-label="Next item"
-      data-tinylight-next-button=""
-      data-tinylight-nav-button=""
+      data-tinylight-next-button
+      data-tinylight-nav-button
       {...rest}
     >
       {Icon ?? <NextArrow />}
@@ -485,6 +525,7 @@ export const Lightbox = {
   Image: LightboxImage,
   Video: LightboxVideo,
   Thumbs: LightboxThumbs,
+  Bullets: LightboxBullets,
   Close: LightboxClose,
   PrevButton: LightboxPrevButton,
   NextButton: LightboxNextButton,
@@ -495,6 +536,7 @@ export type {
   LightboxItemsProps as ItemsProps,
   LightboxRootProps as RootProps,
   LightboxThumbsProps as ThumbsProps,
+  LightboxBulletsProps as BulletsProps,
   LightboxTriggerProps as TriggerProps,
   LightboxImageProps as ImageProps,
   LightboxVideoProps as VideoProps,
