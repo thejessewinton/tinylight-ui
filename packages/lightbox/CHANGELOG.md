@@ -1,5 +1,11 @@
 # @tinylight-ui/lightbox
 
+## 2.4.0
+
+### Minor Changes
+
+- add bullets
+
 ## 2.3.0
 
 ### Minor Changes

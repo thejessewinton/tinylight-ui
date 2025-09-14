@@ -50,7 +50,7 @@ export const LightboxComponent = () => {
         </Lightbox.Items>
         <Lightbox.Controls>
           <Lightbox.PrevButton />
-          <Lightbox.Thumbs />
+          <Lightbox.Bullets />
           <Lightbox.NextButton />
         </Lightbox.Controls>
       </Lightbox.Content>

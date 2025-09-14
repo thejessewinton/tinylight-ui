@@ -27,7 +27,7 @@
   "bugs": {
     "url": "https://github.com/thejessewinton/tinylight-ui/issues"
   },
-  "packageManager": "pnpm@10.11.0",
+  "packageManager": "pnpm@10.16.1",
   "engines": {
     "node": ">=22"
   }
